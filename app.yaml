@@ -1,0 +1,15 @@
+runtime: nodejs20
+instance_class: F1
+env_variables:
+  MONGO_URI:  'projects/$PROJECT_ID/secrets/mongo_uri/versions/latest'
+  REDIS_URL:  'projects/$PROJECT_ID/secrets/redis_url/versions/latest'
+  JWT_SECRET: 'projects/$PROJECT_ID/secrets/jwt_secret/versions/latest'
+  CLIENT_URL: 'https://$PROJECT_ID.uc.r.appspot.com'
+handlers:
+  - url: /api/.*
+    secure: always
+    script: auto
+  - url: /.*
+    secure: always
+    static_files: client/dist/index.html
+    upload: client/dist/index.html
