@@ -1,0 +1,21 @@
+{
+    "name": "server",
+    "private": true,
+    "scripts": {
+      "dev":   "nodemon src/server.ts",
+      "build": "tsc -p ."
+    },
+    "dependencies": {
+      "express": "^4",
+      "mongoose": "^8",
+      "cookie-parser": "^1.4.7",
+      "socket.io": "^4"
+      
+    },
+    "devDependencies": {
+      "typescript": "^5",
+      "@types/express": "^4",
+      "nodemon": "^3"
+    }
+  }
+  

@@ -1,0 +1,17 @@
+{
+    "name": "client",
+    "private": true,
+    "scripts": {
+      "dev":   "vite",
+      "build": "vite build"
+    },
+    "dependencies": {
+      "react": "^19",
+      "react-dom": "^19"
+    },
+    "devDependencies": {
+      "vite": "^6",
+      "@vitejs/plugin-react": "^4"
+    }
+  }
+  
