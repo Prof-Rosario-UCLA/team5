@@ -19,7 +19,7 @@ app.use(cookieParser());
 const csrfProtection = csrf({
   cookie: { httpOnly: true, sameSite: "strict", secure: true }
 });
-app.use("/api", csrfProtection);
+app.use("/api", csrf({cookie: { httpOnly: true, sameSite: "strict", secure: true }}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
