@@ -1,5 +1,6 @@
 {
     "name": "bruinblog",
+    "type": "module",
     "private": true,
     "workspaces": [
         "client",

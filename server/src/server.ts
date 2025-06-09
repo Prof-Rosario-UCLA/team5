@@ -1,8 +1,6 @@
 import express from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
-import csurf from "csurf";
-import { CsrfSync } from "csrf-sync";
 import Fastify from "fastify";
 import fastifyExpress from "fastify-express";
 import csrfProtection from "@fastify/csrf-protection";
@@ -15,7 +13,7 @@ import registerCommentSockets from "./sockets/comments";
 
 await mongoose.connect(process.env.MONGO_URI!);
 const f = Fastify();
-await f.register(fastifyExpress);   // exposes f.use like Express
+await f.register(fastifyExpress);
 await f.register(csrfProtection, {
   cookieOpts: { httpOnly: true, sameSite: "strict", secure: true },
 });

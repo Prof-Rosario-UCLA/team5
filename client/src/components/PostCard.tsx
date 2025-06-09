@@ -1,7 +1,12 @@
 import React from "react";
 import { useRef} from "react";
 
-export default function PostCard({ post }) {
+
+export default function PostCard({post,
+  }: {
+    post: { _id: string; title: string; excerpt: string };
+  }) 
+{
   const ref = useRef<HTMLDivElement>(null);
 
   function onDragStart(e: React.DragEvent) {

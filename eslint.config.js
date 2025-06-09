@@ -7,10 +7,20 @@ export default [
 
   {
     files: ["**/*.ts", "**/*.tsx"],
+    ignores: ["**/dist/**"],
     languageOptions: {
       parser: tsParser,
-      parserOptions: { sourceType: "module", project: true }
+      parserOptions: {
+        project: [
+          "./client/tsconfig.json",
+          "./server/tsconfig.json"
+        ],
+        tsconfigRootDir: import.meta.dirname,
+        sourceType: "module"
+      },
+      globals: { process: "readonly", console: "readonly" }
     },
+    env: { node: true, browser: true },
     plugins: { "@typescript-eslint": tseslint },
     rules: {
     }
