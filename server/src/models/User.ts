@@ -1,11 +1,22 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 
-const userSchema = new Schema({
-  email: { type: String, unique: true, lowercase: true },
-  passwordHash: String,
-  verified: { type: Boolean, default: false }
+interface UserDoc extends Document {
+  email: string;
+  passwordHash: string;
+  verified: boolean;
+  verificationToken?: string;
+  verificationTokenExpires?: Date;
+}
+
+const userSchema = new Schema<UserDoc>({
+  email: { type: String, required: true, unique: true },
+  passwordHash: { type: String, required: true },
+  verified: { type: Boolean, default: false },
+  verificationToken: String,
+  verificationTokenExpires: Date
 });
+
 userSchema.methods.verifyPassword = function (pw: string) {
   return bcrypt.compare(pw, this.passwordHash);
 };
