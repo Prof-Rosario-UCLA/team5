@@ -10,6 +10,7 @@ import { Server as IOServer } from "socket.io";
 import authRoutes from "./routes/auth";
 import postRoutes from "./routes/posts";
 import registerCommentSockets from "./sockets/comments";
+import requireAuth from "./middleware/requireAuth";
 
 await mongoose.connect(process.env.MONGO_URI!);
 const f = Fastify();
@@ -25,7 +26,7 @@ app.use(cookieParser());
 
 
 app.use("/api/auth", authRoutes);
-app.use("/api/posts", postRoutes);
+app.use("/api/posts", postRoutes, requireAuth);
 
 const httpServer = createServer(app);
 const io = new IOServer(httpServer, { cors: { origin: process.env.CLIENT_URL } });

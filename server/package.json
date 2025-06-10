@@ -13,11 +13,13 @@
         "express": "^4",
         "fastify": "^5.3.3",
         "fastify-express": "^0.3.3",
+        "jsonwebtoken": "^9.0.2",
         "mongoose": "^8",
         "socket.io": "^4"
     },
     "devDependencies": {
         "@types/csurf": "^1.11.5",
+        "@types/jsonwebtoken": "^9.0.9",
         "@types/express": "^4",
         "nodemon": "^3",
         "typescript": "^5"
