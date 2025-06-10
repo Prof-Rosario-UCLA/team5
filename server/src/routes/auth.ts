@@ -52,8 +52,9 @@ router.post("/register", async (req, res, next) => {
       verificationTokenExpires,
     });
     console.log(`[dev] Verification link: https://bruinblog.verification/${verificationToken}`);
+    console.log("User verified: ",user.verified);
 
-    return res.status(201).json({ message: "Account created — check email to verify." });
+    return res.status(201).json({ id: user._id, email: user.email, verified: user.verified });
   } catch (err) {
     next(err);
   }
