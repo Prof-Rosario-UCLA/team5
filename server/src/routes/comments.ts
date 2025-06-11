@@ -33,11 +33,11 @@ router.post(
         return res.status(400).json({ error: "body_required" });
       }
 
-      const comment = await Comment.create({
+    const comment = await Comment.create({
         postId,
-        author: req.cookies["_jwt"] ? req.app.get("userEmail") : "anon",
+        author: res.locals.userId,
         body: body.trim(),
-      });
+    });
 
       // broadcast via Socket.io
       const io = req.app.get("io") as import("socket.io").Server;
