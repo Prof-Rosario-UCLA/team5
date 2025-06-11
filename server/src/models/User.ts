@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document, Model } from "mongoose";
 import bcrypt from "bcryptjs";
 
 interface UserDoc extends Document {
@@ -7,6 +7,7 @@ interface UserDoc extends Document {
   verified: boolean;
   verificationToken?: string;
   verificationTokenExpires?: Date;
+  verifyPassword(pw: string): Promise<boolean>;
 }
 
 const userSchema = new Schema<UserDoc>({
@@ -20,4 +21,5 @@ const userSchema = new Schema<UserDoc>({
 userSchema.methods.verifyPassword = function (pw: string) {
   return bcrypt.compare(pw, this.passwordHash);
 };
-export default model("User", userSchema);
+export const User: Model<UserDoc> = model<UserDoc>("User", userSchema);
+export default User;

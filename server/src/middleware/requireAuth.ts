@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Response, Request, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 export default function requireAuth(
@@ -12,6 +12,7 @@ export default function requireAuth(
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as { sub: string };
     res.locals.userId = payload.sub;
+    console.log("Auth Ok userID:", payload.sub);
     next();
   } catch {
     return res.status(401).json({ error: "token_invalid" });

@@ -2,10 +2,13 @@ import React from "react";
 import { useRef} from "react";
 
 
-export default function PostCard({post,
-  }: {
-    post: { _id: string; title: string; excerpt: string };
-  }) 
+export interface Post {
+  _id: string;
+  title: string;
+  excerpt?: string;
+}
+
+export default function PostCard({post} : {post: Post}) 
 {
   const ref = useRef<HTMLDivElement>(null);
 

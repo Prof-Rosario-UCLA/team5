@@ -1,26 +1,21 @@
-import { Router, Request, Response } from "express";
-import Post from "../models/Post";
-import { bumpTrending, getTrending } from "../middleware/trendingCache";
+import { Router} from "express";
+import type { Response, Request } from "express";
+import Post from "../models/Post.ts";
+import { bumpTrending, getTrending } from "../middleware/trendingCache.ts";
 import { z } from "zod";
 
 const router = Router();
 
-// ---------- validators ----------
 const createSchema = z.object({
   title: z.string().min(5),
   markdown: z.string().min(20),
 });
-const updateSchema = createSchema.partial(); // any subset of fields
+const updateSchema = createSchema.partial(); 
 
-// ---------- helpers ----------
 function markdownToHtml(md: string) {
-  // TODO: swap this for your Wasm markdown engine
   return md.replace(/^# (.*$)/gm, "<h1>$1</h1>").replace(/\n/g, "<br>");
 }
 
-// ---------- routes ----------
-
-// POST /api/posts
 router.post("/", async (req: Request, res: Response) => {
   const parse = createSchema.safeParse(req.body);
   if (!parse.success) return res.status(400).json(parse.error.flatten());
@@ -29,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
   const html = markdownToHtml(markdown);
 
   const post = await Post.create({
-    author: res.locals.userId, // assume auth middleware set this
+    author: res.locals.userId,
     title,
     markdown,
     html,
@@ -38,7 +33,6 @@ router.post("/", async (req: Request, res: Response) => {
   res.status(201).json(post);
 });
 
-// GET /api/posts/:id
 router.get("/:id", async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ error: "not_found" });
@@ -50,7 +44,6 @@ router.get("/:id", async (req, res) => {
   res.json(post);
 });
 
-// GET /api/posts (paged list)
 router.get("/", async (req, res) => {
   const page = Number(req.query.page ?? 1);
   const PAGE_SIZE = 10;
@@ -59,17 +52,16 @@ router.get("/", async (req, res) => {
     .sort({ createdAt: -1 })
     .skip((page - 1) * PAGE_SIZE)
     .limit(PAGE_SIZE)
-    .select("-markdown"); // send excerpt only
+    .select("-markdown"); 
 
   res.json(posts);
 });
 
-// GET /api/posts/trending
 router.get("/trending/ids", async (_req, res) => {
-  res.json(await getTrending(10));
-});
+    const ids = await getTrending(10); 
+    res.json(ids);                        
+  });
 
-// PUT /api/posts/:id
 router.put("/:id", async (req, res) => {
   const parse = updateSchema.safeParse(req.body);
   if (!parse.success) return res.status(400).json(parse.error.flatten());
@@ -88,7 +80,6 @@ router.put("/:id", async (req, res) => {
   res.json(post);
 });
 
-// DELETE /api/posts/:id
 router.delete("/:id", async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ error: "not_found" });

@@ -11,12 +11,20 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest}"],
         runtimeCaching: [
           {
-            urlPattern: /\/api\/posts\/recent/,
+            urlPattern: /\/api\/posts/,
             handler: "NetworkFirst",
-            options: { cacheName: "posts-cache" }
+            options: { cacheName: "posts-api" }
           }
-        ]
-      }
+        ],
+        navigateFallback: "/index.html"
+      },
+      includeAssets: ["favicon.ico"]
     })
-  ]
+  ],
+  server:{
+    proxy:{
+      "/api": "http://localhost:8080"
+    }
+  },
+  assetsInclude: ["**/*.wasm"]
 });
