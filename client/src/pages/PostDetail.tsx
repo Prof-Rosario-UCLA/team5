@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import CommentPane from "../components/CommentPane";
 import type { Post } from "../components/PostCard";
 
 export default function PostDetail() {
@@ -22,7 +21,6 @@ export default function PostDetail() {
         className="prose dark:prose-invert"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
-      <CommentPane postId={post._id} />
     </article>
   );
 }

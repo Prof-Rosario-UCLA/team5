@@ -4,11 +4,11 @@ import express, {Request,Response, RequestHandler} from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import csrf from "csurf";
-//import { csrfSync } from "csrf-sync";
 import mongoose from "mongoose";
 import { createServer } from "http";
 import { Server as IOServer } from "socket.io";
-import authRoutes from "./routes/auth.ts"
+import authRoutes from "./routes/auth.ts";
+import commentsRoutes from "./routes/comments.ts";
 import postRoutes from "./routes/posts.ts";
 import registerCommentSockets from "./sockets/comments.ts";
 import requireAuth from "./middleware/requireAuth.ts";
@@ -49,9 +49,11 @@ app.get("/api/csrf-token", csrfProtection, (req: Request, res: Response) => {
 
 app.use("/api", csrfProtection);
 app.use("/api/posts", requireAuth, postRoutes);
+app.use("/api/posts/:postId/comments",requireAuth, commentsRoutes);
 
 const httpServer = createServer(app);
 const io = new IOServer(httpServer, { cors: { origin: process.env.CLIENT_URL } });
+app.set("io",io);
 registerCommentSockets(io);
 
 httpServer.listen(process.env.PORT || 8080, () =>
