@@ -22,16 +22,7 @@ export default function PostList() {
 
   useEffect(() => {
     load();
-  }, [load]);
-
-  useEffect(() => {
-    if (!hasMore) return;
-    const io = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) setPage((p) => p + 1);
-    });
-    if (loader.current) io.observe(loader.current);
-    return () => io.disconnect();
-  }, [hasMore]);
+  }, [page]);
 
   return (
     <section className="grid gap-4 md:grid-cols-[minmax(0,1fr)_280px] max-w-5xl mx-auto">

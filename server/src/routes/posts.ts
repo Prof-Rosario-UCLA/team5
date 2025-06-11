@@ -33,7 +33,7 @@ router.post("/", async (req: Request, res: Response) => {
   res.status(201).json(post);
 });
 
-router.get("/:id", async (req, res) => {
+router.get('/:id([0-9a-fA-F]{24})', async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ error: "not_found" });
 

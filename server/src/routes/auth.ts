@@ -135,6 +135,19 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.get("/me", async (req, res) => {
+    const token = req.cookies["_jwt"];
+    if (!token) return res.status(401).json({ error: "unauthenticated" });
+    try {
+      const { sub } = jwt.verify(token, JWT_SECRET) as { sub: string };
+      const user = await User.findById(sub).select("email");
+      if (!user) throw new Error("User not found");
+      return res.json({ email: user.email });
+    } catch {
+      return res.status(401).json({ error: "token_invalid" });
+    }
+  });
+
 router.post("/logout", (req, res) => {
   res.clearCookie("_jwt");
   res.status(204).end();
