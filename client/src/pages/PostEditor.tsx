@@ -18,45 +18,47 @@ export default function PostEditor() {
     e.preventDefault();
     setErr("");
     try {
-        const { data } = await axios.post<{ _id: string }>("/api/posts", {
-        title,
-        markdown
-        }, {withCredentials: true});
-        nav(`/${data._id}`);
-    } catch(error: any) {
-        const msg = error.response?.data?.error ?? error.message ?? "Unknown Error";
-        console.error("Post /api/posts failed", msg);
-        setErr(msg);
+      const { data } = await axios.post<{ _id: string }>(
+        "/api/posts",
+        { title, markdown },
+        { withCredentials: true }
+      );
+      nav(`/${data._id}`);
+    } catch (error: any) {
+      const msg = error.response?.data?.error || error.message;
+      setErr(msg);
     }
   }
 
   return (
-    <main className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6 p-2">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <main className="container" style={{ display: "grid", gap: "1.5rem", gridTemplateColumns: "1fr 1fr" }}>
+      {/* editor */}
+      <form onSubmit={handleSubmit} className="flex-col-gap">
         <input
-          className="border p-2 rounded"
+          className="input"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
           required
         />
         <textarea
-          className="border p-2 rounded h-64 font-mono"
+          className="textarea"
+          style={{ height: "260px", fontFamily: "monospace" }}
           value={markdown}
           onChange={(e) => setMarkdown(e.target.value)}
           placeholder="Write in Markdown…"
           required
         />
-        {err && <p className="text-red-600">{err}</p>}
-        <button className="bg-indigo-600 text-white py-2 rounded hover:bg-indigo-500">
-          Publish
-        </button>
+        {err && <p className="auth-error">{err}</p>}
+        <button className="btn btn-primary">Publish</button>
       </form>
 
+      {/* live preview */}
       <article
-        className="prose dark:prose-invert overflow-auto border rounded p-4"
+        className="card"
+        style={{ padding: "1rem", overflowY: "auto" }}
         dangerouslySetInnerHTML={{ __html: renderMarkdown(markdown) }}
-      ></article>
+      />
     </main>
   );
 }

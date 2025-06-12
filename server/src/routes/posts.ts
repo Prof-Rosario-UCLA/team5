@@ -1,7 +1,7 @@
 import { Router} from "express";
 import type { Response, Request } from "express";
 import Post from "../models/Post.ts";
-import { bumpTrending, getTrending } from "../middleware/trendingCache.ts";
+import { getTrending } from "../middleware/trendingCache.ts";
 import { z } from "zod";
 
 const router = Router();
@@ -34,13 +34,16 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 router.get('/:id([0-9a-fA-F]{24})', async (req, res) => {
-  const post = await Post.findById(req.params.id);
-  if (!post) return res.status(404).json({ error: "not_found" });
+  const dbPost = await Post.findById(req.params.id)
+    .populate("author", "email")
+    .lean();
 
-  post.views++;
-  await post.save();
-  bumpTrending(post.id).catch(console.error);
-
+  if (!dbPost) return res.status(404).json({ error: "not_found" });
+  const post = {
+    ...dbPost,
+    email: (dbPost.author as any).email
+  };
+  Post.updateOne({ _id: post._id }, { $inc: { views: 1 } }).catch(console.error);
   res.json(post);
 });
 
@@ -48,11 +51,18 @@ router.get("/", async (req, res) => {
   const page = Number(req.query.page ?? 1);
   const PAGE_SIZE = 10;
 
-  const posts = await Post.find()
+  const dbPosts = await Post.find()
     .sort({ createdAt: -1 })
     .skip((page - 1) * PAGE_SIZE)
     .limit(PAGE_SIZE)
-    .select("-markdown"); 
+    .populate("author", "email")
+    .select("-markdown")
+    .lean();
+
+  const posts = dbPosts.map(p => ({
+    ...p,
+    email: (p.author as any).email
+  }));
 
   res.json(posts);
 });

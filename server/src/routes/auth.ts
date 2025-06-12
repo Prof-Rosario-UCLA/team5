@@ -40,25 +40,21 @@ function setJwtCookie(res: Response) {
 
 const router = Router();
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", async (req, res) => {
     console.log("[auth] POST /register body:", req.body);
   try {
     const { email, password } = req.body as { email: string; password: string };
-    console.log("Insdie register");
     if (!email || !password) {
       return res.status(400).json({ error: "Email & password required" });
     }
-    console.log("Hello0");
     const exists = await User.findOne({ email });
     console.log(exists);
     if (exists?.verified == true) {
       return res.status(409).json({ error: "Account already exists" });
     }
-    console.log("Hello1");
     const passwordHash = await bcrypt.hash(password, 12);
     const verificationToken = crypto.randomBytes(32).toString("hex");
     const verificationTokenExpires = new Date(Date.now() + 1000 * 60 * 60 * 24);
-    console.log("Hello2");
     const user = await User.create({
       email,
       passwordHash,
@@ -66,7 +62,6 @@ router.post("/register", async (req, res, next) => {
       verificationToken,
       verificationTokenExpires,
     });
-    console.log("Trying to send email");
     const verifyUrl = `${CLIENT_URL}/verify/${verificationToken}`;
       try{
         transporter.sendMail({
@@ -83,11 +78,8 @@ router.post("/register", async (req, res, next) => {
         `
       });}
       catch(error){
-        console.log("Error sending verification email");
+        console.log("Error sending verification email ", error);
       }
-      console.log("Verification email sent");
-    console.log(`[dev] Verification link: https://bruinblog.verification/${verificationToken}`);
-    console.log("User verified: ",user.verified);
 
     return res.status(201).json({ id: user._id, email: user.email, verified: user.verified });
   } catch (err) {

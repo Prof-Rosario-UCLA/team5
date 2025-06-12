@@ -1,3 +1,4 @@
+import "./index.css"
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import AppRouter from './router';
@@ -15,8 +16,8 @@ console.log("main");
   }
   const root = ReactDOM.createRoot(document.getElementById("root")!);
   root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
       <AppRouter />
-    </React.StrictMode>
+    // </React.StrictMode>
   );
 

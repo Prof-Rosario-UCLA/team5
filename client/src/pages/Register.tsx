@@ -13,29 +13,24 @@ export default function Register() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (pw !== confirm) {
-      setErr("Passwords do not match");
-      return;
-    }
-    try{
-        const ok = await register(email, pw);
-        nav("/verify");
-    }
-    catch(error:any){
-        console.error("Failed to register");
-        const status= error.response?.status;
-        const data = error.response?.data;
-        setErr(status ? `Error ${status} : ${data?.error || data || error.message}`: error.message);
+    if (pw !== confirm) return setErr("Passwords do not match");
 
+    try {
+      await register(email, pw);
+      nav("/verify");
+    } catch (error: any) {
+      const status = error.response?.status;
+      const data = error.response?.data;
+      setErr(status ? `Error ${status}: ${data?.error || data}` : error.message);
     }
   }
 
   return (
-    <main className="max-w-md mx-auto mt-16 bg-white p-6 rounded shadow">
-      <h1 className="text-2xl mb-4 font-bold">Create account</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <main className="card auth-box">
+      <h1 className="auth-title">Create account</h1>
+      <form onSubmit={handleSubmit} className="flex-col-gap">
         <input
-          className="border p-2 rounded"
+          className="input"
           type="email"
           placeholder="Email"
           value={email}
@@ -43,7 +38,7 @@ export default function Register() {
           required
         />
         <input
-          className="border p-2 rounded"
+          className="input"
           type="password"
           placeholder="Password"
           value={pw}
@@ -51,17 +46,15 @@ export default function Register() {
           required
         />
         <input
-          className="border p-2 rounded"
+          className="input"
           type="password"
           placeholder="Confirm password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           required
         />
-        {err && <p className="text-red-600">{err}</p>}
-        <button className="bg-indigo-600 text-white py-2 rounded hover:bg-indigo-500">
-          Register
-        </button>
+        {err && <p className="auth-error">{err}</p>}
+        <button className="btn btn-primary">Register</button>
       </form>
     </main>
   );

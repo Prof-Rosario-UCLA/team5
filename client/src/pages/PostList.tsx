@@ -25,21 +25,28 @@ export default function PostList() {
   }, [page]);
 
   return (
-    <section className="grid gap-4 md:grid-cols-[minmax(0,1fr)_280px] max-w-5xl mx-auto">
-      <div>
+    <section className="container post-list" style={{ marginTop: "2rem" }}>
+      {/* feed column */}
+      <div className="flex-col-gap">
         {posts.map((p) => (
           <Link key={p._id} to={`/${p._id}`}>
             <PostCard post={p} />
           </Link>
         ))}
+
         {hasMore && (
-          <div ref={loader} className="text-center py-4 text-sm text-gray-500">
+          <div
+            ref={loader}
+            className="text-small"
+            style={{ textAlign: "center", padding: "1rem" }}
+          >
             Loading…
           </div>
         )}
       </div>
 
-      <aside className="hidden md:block">
+      {/* sidebar */}
+      <aside className="card" style={{ padding: "1rem" }}>
         <TrendingSidebar />
       </aside>
     </section>
@@ -49,25 +56,20 @@ export default function PostList() {
 function TrendingSidebar() {
   const [ids, setIds] = useState<string[]>([]);
   useEffect(() => {
-    axios
-      .get("/api/posts/trending/ids").then((r) => {
-        if (Array.isArray(r.data)) setIds(r.data);
-        else if (Array.isArray(r.data.ids)) setIds(r.data.ids);
-      });
+    axios.get("/api/posts/trending/ids").then((r) => {
+      const d = r.data;
+      setIds(Array.isArray(d) ? d : d.ids || []);
+    });
   }, []);
 
   return (
-    <div className="sticky top-4 space-y-2">
-      <h2 className="font-bold mb-2">Trending</h2>
+    <>
+      <h2 className="comments-title">Trending</h2>
       {ids.map((id) => (
-        <Link
-          key={id}
-          to={`/${id}`}
-          className="block text-indigo-700 hover:underline"
-        >
+        <Link key={id} to={`/${id}`} style={{ display: "block", marginTop: ".5rem" }}>
           {id.slice(0, 6)}…
         </Link>
       ))}
-    </div>
+    </>
   );
 }

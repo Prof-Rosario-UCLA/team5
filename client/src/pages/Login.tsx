@@ -14,18 +14,15 @@ export default function Login() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const ok = await login(email, pw);
-    if (ok) {
-      const dest = loc.state?.from?.pathname ?? "/";
-      nav(dest);
-    } else setErr("Invalid credentials");
+    ok ? nav(loc.state?.from?.pathname ?? "/") : setErr("Invalid credentials");
   }
 
   return (
-    <main className="max-w-md mx-auto mt-16 bg-white p-6 rounded shadow">
-      <h1 className="text-2xl mb-4 font-bold">Sign in</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <main className="card auth-box">
+      <h1 className="auth-title">Sign&nbsp;in</h1>
+      <form onSubmit={handleSubmit} className="flex-col-gap">
         <input
-          className="border p-2 rounded"
+          className="input"
           type="email"
           placeholder="Email"
           value={email}
@@ -33,23 +30,20 @@ export default function Login() {
           required
         />
         <input
-          className="border p-2 rounded"
+          className="input"
           type="password"
           placeholder="Password"
           value={pw}
           onChange={(e) => setPw(e.target.value)}
           required
         />
-        {err && <p className="text-red-600">{err}</p>}
-        <button className="bg-indigo-600 text-white py-2 rounded hover:bg-indigo-500">
-          Sign in
-        </button>
+        {err && <p className="auth-error">{err}</p>}
+        <button className="btn btn-primary">Sign&nbsp;in</button>
       </form>
-      <p className="mt-4 text-sm">
-        New here?{" "}
-        <Link to="/register" className="text-indigo-700 underline">
-          Create an account
-        </Link>
+
+      <p className="text-small" style={{ marginTop: "1rem" }}>
+        New here?&nbsp;
+        <Link to="/register">Create an account</Link>
       </p>
     </main>
   );

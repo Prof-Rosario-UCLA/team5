@@ -21,7 +21,6 @@ try{
 catch(err){
   console.log("connection failed", err);
 }
-console.log("mongoose connected");
 const app = express();
 app.use(requestLogger);
 app.use(helmet());
@@ -56,6 +55,4 @@ const io = new IOServer(httpServer, { cors: { origin: process.env.CLIENT_URL } }
 app.set("io",io);
 registerCommentSockets(io);
 
-httpServer.listen(process.env.PORT || 8080, () =>
-  console.log("Server live")
-);
+httpServer.listen(process.env.PORT || 8080);

@@ -7,7 +7,7 @@ interface UserDoc extends Document {
   verified: boolean;
   verificationToken?: string;
   verificationTokenExpires?: Date;
-  verifyPassword(pw: string): Promise<boolean>;
+  verifyPassword(): Promise<boolean>;
 }
 
 const userSchema = new Schema<UserDoc>({

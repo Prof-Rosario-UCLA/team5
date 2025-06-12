@@ -12,15 +12,22 @@ export default function PostDetail() {
     axios.get(`/api/posts/${id}`).then((r) => setPost(r.data));
   }, [id]);
 
-  if (!post) return <p className="p-8">Loading…</p>;
+  if (!post) return <p style={{ padding: "2rem" }}>Loading…</p>;
 
   return (
-    <article className="max-w-3xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold">{post.title}</h1>
+    <div>
+    <article className="post-detail card" style={{ padding: "2rem" }}>
+      <h1>{post.title}</h1>
       <div
-        className="prose dark:prose-invert"
+        className="post-body"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
+
     </article>
+    <div style={{textAlign: "center"}}>
+      by {post.email}
+    </div>
+    </div>
+
   );
 }
