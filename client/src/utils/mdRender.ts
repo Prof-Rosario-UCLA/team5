@@ -1,4 +1,4 @@
-/* eslint @typescript-eslint/no-unused-vars:0 */
+/* eslint no-unused-vars:0 */
 let wasmRender: ((_md: string) => string) | null = null;
 
 export function renderMarkdown(_md: string): string {

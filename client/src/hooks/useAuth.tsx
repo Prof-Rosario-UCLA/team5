@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint no-unused-vars: 0 */
 import {createContext, useContext, useState, useEffect } from "react";
 import React from "react";
 import axios from "axios";
@@ -10,19 +10,19 @@ interface User {
 interface AuthCtx {
   user?: User;
   loading: boolean;
-  login(_email: string, _password: string): Promise<boolean>;
+  login(_email?: string, _password?:string): Promise<boolean>;
   logout(): Promise<void>;
-  register(_email: string, _password: string): Promise<boolean>;
+  register( _email?:string, _password?:string): Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthCtx>({
   user: undefined,
   loading: true,
-  async login() {
+  async login(_email?: string, _password?:string) {
     return false;
   },
   async logout() {},
-  async register() {
+  async register( _email?:string, _password?:string) {
     return false;
   }
 });
