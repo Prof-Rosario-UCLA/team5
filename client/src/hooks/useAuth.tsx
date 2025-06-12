@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {createContext, useContext, useState, useEffect } from "react";
 import React from "react";
 import axios from "axios";
@@ -9,7 +10,7 @@ interface User {
 interface AuthCtx {
   user?: User;
   loading: boolean;
-  login(email: string, password: string): Promise<boolean>;
+  login(_email: string, _password: string): Promise<boolean>;
   logout(): Promise<void>;
   register(_email: string, _password: string): Promise<boolean>;
 }
