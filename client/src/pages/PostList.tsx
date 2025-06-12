@@ -8,7 +8,7 @@ const PAGE_SIZE = 10;
 
 export default function PostList() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const loader = useRef<HTMLDivElement | null>(null);
 
