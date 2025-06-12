@@ -16,7 +16,6 @@ export default function Header() {
         <nav className="nav-links">
           <Link to="/">Home</Link>
           <Link to="/new">New&nbsp;Post</Link>
-          <Link to="#">About</Link>
         </nav>
 
         {user ? (

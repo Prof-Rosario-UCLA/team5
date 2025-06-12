@@ -11,7 +11,7 @@ interface AuthCtx {
   loading: boolean;
   login(email: string, password: string): Promise<boolean>;
   logout(): Promise<void>;
-  register(email: string, password: string): Promise<boolean>;
+  register(_email: string, _password: string): Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthCtx>({
